@@ -1,0 +1,32 @@
+version: '3.8'
+
+services:
+  # SERVIZIO 1: La tua Web App
+  web:
+    build: .
+    ports:
+      - "5000:5000"
+    volumes:
+      - ./app:/app
+      - web-data:/tmp # Volume condiviso per i file
+    depends_on:
+      - redis-db
+
+  # SERVIZIO 2: Il Database (Redis)
+  redis-db:
+    image: redis:alpine
+    volumes:
+      - redis-data:/data # Volume per non perdere il conteggio se riavvii
+
+  # SERVIZIO 3: Cleaner (Pulizia automatica)
+  # Ogni 5 minuti cancella i PDF vecchi dalla cartella condivisa
+  cleaner:
+    image: alpine:latest
+    volumes:
+      - web-data:/tmp
+    command: >
+      sh -c "while true; do  echo 'Pulizia file vecchi...'; find /tmp -name '*.pdf' -mmin +5 -delete;  sleep 300;  done"
+
+volumes:
+  web-data:
+  redis-data:
