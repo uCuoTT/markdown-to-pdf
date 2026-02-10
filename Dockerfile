@@ -1,23 +1,23 @@
 FROM python:3.9-slim
 
-# Install system dependencies
-RUN apt-get update && apt-get install -y \
+# Installiamo TUTTO quello che serve per evitare errori di stile o font mancanti
+RUN apt-get update && \
+    apt-get install -y --no-install-recommends \
     pandoc \
-    texlive-latex-base \
+    texlive-xetex \
     texlive-fonts-recommended \
-    texlive-extra-utils \
-    texlive-latex-extra \
-    && rm -rf /var/lib/apt/lists/*
-
+    texlive-plain-generic \
+    fonts-liberation \
+    lmodern \
+    texlive-latex-extra && \
+    rm -rf /var/lib/apt/lists/*
 
 WORKDIR /app
 
-# Install Python dependencies
 COPY app/requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 
-# Copy application code
-COPY app .
+COPY app/ .
 
 EXPOSE 5000
 
