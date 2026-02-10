@@ -7,7 +7,7 @@ on:
     branches: [ "main" ]
 
 jobs:
-  # JOB 1: Esegue i test automatici sul codice Python
+  # JOB 1: Test Automatici
   test-code:
     runs-on: ubuntu-latest
     steps:
@@ -24,12 +24,13 @@ jobs:
           pip install flask redis
       
       - name: Esecuzione Test Automatici
-        # Qui lancia lo script che abbiamo creato
-        run: python -m unittest app/test_app.py
+        run: |
+          cd app
+          python -m unittest test_app
 
-  # JOB 2: Costruisce l'immagine Docker (Parte solo se i test passano)
+  # JOB 2: Build Docker (Parte solo se i test passano)
   build-image:
-    needs: test-code  # <--- IMPORTANTE: Aspetta che i test finiscano!
+    needs: test-code
     runs-on: ubuntu-latest
     steps:
       - name: Checkout del codice
