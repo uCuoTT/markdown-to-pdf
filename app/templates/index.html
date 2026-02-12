@@ -1,12 +1,42 @@
 <!DOCTYPE html>
 <html lang="it">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Convertitore Universale</title>
+    <title>Cloud Converter</title>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
     <style>
+        /* 1. RESET TOTALE: Elimina spazi bianchi indesiderati */
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        /* 2. BLOCCO SCORRIMENTO: Impedisce lo scroll della pagina */
+        html, body {
+            width: 100%;
+            height: 100%;
+            overflow: hidden; 
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            /* Sfondo */
+            background: linear-gradient(rgba(15, 23, 42, 0.7), rgba(15, 23, 42, 0.8)), 
+                        url('https://images.unsplash.com/photo-1519389950473-47ba0277781c?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+
+            /* Centramento perfetto */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: #2d3748;
+        }
+
+        /* Variabili Colori */
         :root {
             --primary-color: #4e54c8;
             --secondary-color: #8f94fb;
@@ -14,146 +44,71 @@
             --success-color: #48bb78;
         }
 
-        body {
-            font-family: 'Poppins', sans-serif;
-            background: linear-gradient(rgba(15, 23, 42, 0.7), rgba(15, 23, 42, 0.8)),
-                url('https://images.unsplash.com/photo-1519389950473-47ba0277781c?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80');
-            background-size: cover;
-            background-position: center;
-            background-attachment: fixed;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            min-height: 100vh;
-            margin: 0;
-            padding: 20px;
-            color: var(--text-dark);
-        }
-
+        /* Contenitore Principale */
         .container {
             background-color: rgba(255, 255, 255, 0.92);
             backdrop-filter: blur(15px);
-            padding: 50px;
+            padding: 40px;
             border-radius: 24px;
-            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
-            width: 100%;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+            width: 90%;
             max-width: 450px;
             text-align: center;
+            /* Animazione d'ingresso */
+            animation: fadeIn 0.8s ease-out;
         }
 
-        h1 {
-            margin: 0 0 10px 0;
-            font-size: 28px;
-            font-weight: 700;
-            color: var(--primary-color);
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-20px); }
+            to { opacity: 1; transform: translateY(0); }
         }
 
-        .stats-badge {
-            background: #e0e7ff;
-            color: var(--primary-color);
-            padding: 8px 20px;
-            border-radius: 30px;
-            font-weight: 600;
-            display: inline-block;
-            margin-bottom: 30px;
-        }
+        h1 { margin: 0 0 10px 0; font-size: 28px; font-weight: 700; color: var(--primary-color); }
+        .stats-badge { background: #e0e7ff; color: var(--primary-color); padding: 8px 20px; border-radius: 30px; font-weight: 600; display: inline-block; margin-bottom: 30px; }
 
         .upload-area {
             border: 2px dashed #cbd5e0;
-            background-color: rgba(255, 255, 255, 0.5);
+            background-color: rgba(255,255,255, 0.5);
             border-radius: 12px;
             padding: 30px 20px;
             margin-bottom: 20px;
             cursor: pointer;
             position: relative;
+            transition: all 0.3s ease;
         }
+        .upload-area:hover { border-color: var(--primary-color); background-color: rgba(235, 244, 255, 0.6); transform: scale(1.02); }
+        
+        input[type="file"] { position: absolute; top: 0; left: 0; width: 100%; height: 100%; opacity: 0; cursor: pointer; }
 
-        .upload-area:hover {
-            border-color: var(--primary-color);
-            background-color: rgba(235, 244, 255, 0.6);
-        }
+        label { display: block; text-align: left; font-size: 13px; font-weight: 600; color: #4a5568; margin-bottom: 5px; margin-left: 2px; }
 
-        input[type="file"] {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            opacity: 0;
-            cursor: pointer;
-        }
-
-        /* Stile Select */
         select {
-            width: 100%;
-            padding: 12px;
-            border-radius: 8px;
-            border: 1px solid #cbd5e0;
-            background: white;
-            font-family: inherit;
-            margin-bottom: 25px;
-            cursor: pointer;
+            width: 100%; padding: 12px; border-radius: 8px; border: 1px solid #cbd5e0;
+            background: white; font-family: inherit; margin-bottom: 25px; cursor: pointer;
+            outline: none;
         }
+        select:focus { border-color: var(--primary-color); box-shadow: 0 0 0 3px rgba(78, 84, 200, 0.2); }
 
         button {
             background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
-            color: white;
-            border: none;
-            padding: 15px 30px;
-            border-radius: 12px;
-            font-size: 16px;
-            font-weight: 600;
-            cursor: pointer;
-            width: 100%;
-            transition: all 0.3s;
+            color: white; border: none; padding: 15px 30px; border-radius: 12px; font-size: 16px; font-weight: 600;
+            cursor: pointer; width: 100%; transition: all 0.3s;
+            box-shadow: 0 4px 6px rgba(50, 50, 93, 0.11), 0 1px 3px rgba(0, 0, 0, 0.08);
         }
+        button:hover { transform: translateY(-2px); box-shadow: 0 7px 14px rgba(50, 50, 93, 0.1), 0 3px 6px rgba(0, 0, 0, 0.08); }
+        button:disabled { background: #cbd5e0; cursor: not-allowed; transform: none; box-shadow: none; }
+        button.success { background: var(--success-color); }
 
-        button:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 10px 20px rgba(78, 84, 200, 0.3);
-        }
-
-        button:disabled {
-            background: #cbd5e0;
-            cursor: not-allowed;
-            transform: none;
-        }
-
-        button.success {
-            background: var(--success-color);
-        }
-
-        .loader {
-            display: none;
-            border: 3px solid rgba(255, 255, 255, 0.3);
-            border-top: 3px solid white;
-            border-radius: 50%;
-            width: 22px;
-            height: 22px;
-            animation: spin 0.8s linear infinite;
-            margin: 0 auto;
-        }
-
-        @keyframes spin {
-            0% {
-                transform: rotate(0deg);
-            }
-
-            100% {
-                transform: rotate(360deg);
-            }
-        }
-
-        .hidden {
-            display: none;
-        }
+        .loader { display: none; border: 3px solid rgba(255,255,255,0.3); border-top: 3px solid white; border-radius: 50%; width: 22px; height: 22px; animation: spin 0.8s linear infinite; margin: 0 auto; }
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+        .hidden { display: none; }
+        #errorMsg { color: #e53e3e; font-size: 14px; margin-top: 15px; display: none; }
     </style>
 </head>
-
 <body>
 
     <div class="container">
-        <h1>Markdown Converter</h1>
+        <h1>Cloud Converter</h1>
         <div class="stats-badge">Convertiti: <span id="countDisplay">{{ count }}</span></div>
 
         <form id="convertForm">
@@ -163,23 +118,20 @@
                 <input type="file" name="file" accept=".md" required id="fileInput">
             </div>
 
-            <div style="text-align: left;">
-                <label style="font-size: 13px; font-weight: 600; color: #4a5568; margin-left: 5px;">Formato di
-                    uscita:</label>
-                <select name="format" id="format">
-                    <option value="pdf">Documento PDF (.pdf)</option>
-                    <option value="docx">Microsoft Word (.docx)</option>
-                    <option value="html">Pagina Web (.html)</option>
-                </select>
-            </div>
-
+            <label>Formato di uscita:</label>
+            <select name="format" id="format">
+                <option value="pdf">Documento PDF (.pdf)</option>
+                <option value="docx">Microsoft Word (.docx)</option>
+                <option value="html">Pagina Web (.html)</option>
+            </select>
+            
             <button type="submit" id="submitBtn">
                 <span id="btnText">Converti Ora 🚀</span>
                 <div class="loader" id="loader"></div>
             </button>
         </form>
-
-        <p id="errorMsg" style="color: #e53e3e; font-size: 14px; margin-top: 15px; display: none;"></p>
+        
+        <p id="errorMsg"></p>
     </div>
 
     <script>
@@ -192,17 +144,19 @@
         const errorMsg = document.getElementById('errorMsg');
         const countDisplay = document.getElementById('countDisplay');
 
-        // Mostra nome file
-        fileInput.addEventListener('change', function (e) {
+        // Aggiorna il nome del file quando l'utente lo seleziona
+        fileInput.addEventListener('change', function(e) {
             if (e.target.files[0]) {
                 fileNameDisplay.textContent = "File: " + e.target.files[0].name;
                 fileNameDisplay.style.color = "#4e54c8";
             }
         });
 
-        form.addEventListener('submit', async function (e) {
+        // Gestisce l'invio del form
+        form.addEventListener('submit', async function(e) {
             e.preventDefault();
-
+            
+            // UI in caricamento
             btn.disabled = true;
             btnText.classList.add('hidden');
             loader.style.display = 'block';
@@ -216,12 +170,13 @@
                 if (response.ok) {
                     const blob = await response.blob();
                     const url = window.URL.createObjectURL(blob);
-
-                    // Calcolo nome file
+                    
+                    // Calcolo nome file corretto
                     const originalName = fileInput.files[0].name;
                     const format = document.getElementById('format').value;
                     const newFileName = originalName.replace(/\.md$/i, "." + format);
 
+                    // Scarica il file
                     const a = document.createElement('a');
                     a.href = url;
                     a.download = newFileName;
@@ -230,21 +185,21 @@
                     a.remove();
                     window.URL.revokeObjectURL(url);
 
-                    // FEEDBACK SUCCESSO E RESET
+                    // Successo!
                     loader.style.display = 'none';
                     btnText.textContent = "Fatto! ✅";
                     btnText.classList.remove('hidden');
                     btn.classList.add('success');
-
+                    
                     let currentCount = parseInt(countDisplay.innerText) || 0;
                     countDisplay.innerText = currentCount + 1;
 
-                    // RESET DEL FORM (Risolve il problema del file bloccato)
+                    // RESET DOPO 2 SECONDI
                     setTimeout(() => {
-                        form.reset(); // Cancella il file selezionato dalla memoria
-                        fileNameDisplay.textContent = "Clicca per scegliere il file .md"; // Resetta la scritta
-                        fileNameDisplay.style.color = "#4a5568"; // Resetta il colore
-
+                        form.reset(); 
+                        fileNameDisplay.textContent = "Clicca per scegliere il file .md";
+                        fileNameDisplay.style.color = "#4a5568";
+                        
                         btn.disabled = false;
                         btn.classList.remove('success');
                         btnText.textContent = "Converti un altro file 🚀";
@@ -265,5 +220,4 @@
         });
     </script>
 </body>
-
 </html>

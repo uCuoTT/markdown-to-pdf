@@ -54,7 +54,7 @@ def index():
             except:
                 pass
 
-            # Inviamo il file specificando il tipo corretto!
+            # Invia il file specificando il tipo corretto!
             return send_file(
                 output_path, 
                 as_attachment=True, 
